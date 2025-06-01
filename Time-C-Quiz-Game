@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <time.h>
+#include <ctype.h>
+
+#define TOTAL_QUESTIONS 8
+#define TIME_LIMIT 30  
+
+typedef struct
+{
+    char *question;
+    char *options;
+    char correct;
+} Quiz;
+
+int askQuestion(Quiz q)
+ {
+    char answer;
+    time_t start, now;
+    printf("%s\n", q.question);
+    printf("%s", q.options);
+    printf("You have 30 seconds to answer.\n");
+    printf("Your answer: ");
+
+    time(&start);
+    while (1) {
+        if (scanf(" %c", &answer) == 1) {
+            time(&now);
+            if (difftime(now, start) > TIME_LIMIT) {
+                printf("\n⏰ Time's up! You took too long.\n\n");
+                return 0;
+            }
+
+            answer = tolower(answer);
+            if (answer == tolower(q.correct)) {
+                printf("Correct!\n\n");
+                return 1;
+            } else {
+                printf("Wrong! Correct answer is %c.\n\n", q.correct);
+                return 0;
+            }
+        }
+
+        time(&now);
+        if (difftime(now, start) > TIME_LIMIT) {
+            printf("\n⏰ Time's up! You took too long.\n\n");
+            return 0;
+        }
+    }
+}
+
+int main()
+ {
+    Quiz quiz[TOTAL_QUESTIONS] = {
+          {
+
+
+            "1) What will be the output of: printf(\"%d\", 5 + 2 * 3); ?",
+            "A. 21\nB. 11\nC. 7\nD. 17\n",
+            'B'
+        },
+        {
+            "2) Which operator is used to access the value at a pointer in C?",
+            "A. &\nB. *\nC. ->\nD. $\n",
+            'B'
+        },
+        {
+            "3) What is the size of an int data type (on most 32-bit systems)?",
+            "A. 2 bytes\nB. 4 bytes\nC. 8 bytes\nD. Depends on compiler\n",
+            'B'
+        },
+        {
+            "4) Which of the following is a valid function declaration in C?",
+            "A. int func()\nB. function int()\nC. void int()\nD. declare func()\n",
+            'A'
+        },
+        {
+            "5) What is the correct way to declare an array of 10 integers?",
+            "A. int arr[10];\nB. int arr(10);\nC. int arr;\nD. array int arr[10];\n",
+            'A'
+        },
+        {
+            "6) Which loop is guaranteed to execute at least once?",
+            "A. for\nB. while\nC. do-while\nD. None\n",
+            'C'
+        },
+        {
+            "7) What is the purpose of the 'break' statement in C?",
+            "A. Stop the program\nB. Exit a loop/switch\nC. Pause execution\nD. Restart the loop\n",
+            'B'
+        },
+        {
+            "8) Which of these is a preprocessor directive in C?",
+            "A. import\nB. include\nC. #include\nD. using\n",
+            'C'
+        }
+    };
+ printf("__________________________________________________\n");
+ printf("\n");
+    printf("🎉 Welcome to the Timed C Programming Quiz! 🎉\n\n");
+    printf("__________________________________________________\n");
+ printf("\n");
+
+
+    int score = 0;
+    time_t quiz_start, quiz_end;
+    time(&quiz_start);
+
+    for (int i = 0; i < TOTAL_QUESTIONS; i++) {
+        score += askQuestion(quiz[i]);
+    }
+
+    time(&quiz_end);
+    double total_time = difftime(quiz_end, quiz_start);
+    float percentage = (score / (float)TOTAL_QUESTIONS) * 100.0;
+
+    printf("Your Score: %d/%d\n", score, TOTAL_QUESTIONS);
+    printf("Percentage: %.2f%%\n", percentage);
+    printf("Total Time Taken: %.2f seconds\n\n", total_time);
+
+    if (score == TOTAL_QUESTIONS)
+        printf("________NICE_________\n");
+    else if (score >= 6)
+        printf("well try 👍🏻\n");
+    else if (score >= 4)
+        printf("Not bad, keep practicing 🙂\n");
+    else
+        printf("You need more practice. Don't give up!\n");
+
+    return 0;
+}
